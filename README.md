@@ -1,5 +1,5 @@
 # Africa's Talking Golang SDK
-![tests](https://github.com/edwinwalela/africastalking-go/actions/workflows/test.yaml/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)   [![Go Reference](https://pkg.go.dev/badge/badge/github.com/edwinwalela/africastalking-go)](https://pkg.go.dev/github.com/edwinwalela/africastalking-go) 
+![tests](https://github.com/edwinwalela/africastalking-go/actions/workflows/test.yaml/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)  [![Go Report Card](https://goreportcard.com/badge/github.com/edwinwalela/africastalking-go)](https://goreportcard.com/report/github.com/edwinwalela/africastalking-go) [![Go Reference](https://pkg.go.dev/badge/badge/github.com/edwinwalela/africastalking-go)](https://pkg.go.dev/github.com/edwinwalela/africastalking-go) 
 
 Unofficial Golang SDK for the Africa's Talking API with no external dependencies
 
