@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-  client := &Client{
+	client := &Client{
 		ApiKey:    os.Getenv("AT_API_KEY"),
 		Username:  os.Getenv("AT_USERNAME"),
 		IsSandbox: true,
@@ -34,8 +34,8 @@ func main() {
 	}
 
 	response, err := client.SendBulk(bulkRequest)
-  
-    fmt.Println(response)
+
+	fmt.Println(response)
 }
 ```
 ## Local development
@@ -43,7 +43,7 @@ func main() {
 Clone repo
 
 ```
-git clone 
+git clone https://github.com/EdwinWalela/africastalking-go
 ```
 
 Export Africa's talking credentials (sandbox)
@@ -51,7 +51,7 @@ Export Africa's talking credentials (sandbox)
 ```bash
 export AT_USERNAME=sandbox
 
-export AT_API_KEY=xxxxxxxxx
+export AT_API_KEY=xxxxxxxxxxxxx
 ```
 
 Run tests
@@ -59,7 +59,6 @@ Run tests
 ```
 make test
 ```
-
 ## Resources
 
 - [Code Examples](./examples/)
@@ -92,4 +91,6 @@ make test
 ### Mobile Data
 - [ ] Sending
 
+## Contributing
 
+Any contribution, in the form of a suggestion, bug report or pull request, is well accepted.
