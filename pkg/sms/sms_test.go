@@ -20,6 +20,7 @@ func TestSendBulk(t *testing.T) {
 		RetryDuration: time.Hour,
 	}
 	response, err := client.SendBulk(bulkRequest)
+
 	if err != nil {
 		t.Fatalf("bulk sms request failed: %s", err.Error())
 	}
