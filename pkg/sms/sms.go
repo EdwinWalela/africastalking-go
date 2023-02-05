@@ -53,10 +53,10 @@ type Response struct {
 
 // Client represents the HTTP client responsible for communicating with Africa's Talking API
 type Client struct {
-	apiKey    string       // API Key provided by Africa's talking
-	username  string       // Your Africa's talking application username
-	isSandbox bool         // IsSandbox specifies whether to use sandbox or live environment
-	client    *http.Client // HTTP client for making requests to Africa's Talking API
+	ApiKey    string       // API Key provided by Africa's talking
+	Username  string       // Your Africa's talking application username
+	IsSandbox bool         // IsSandbox specifies whether to use sandbox or live environment
+	Client    *http.Client // HTTP client for making requests to Africa's Talking API
 }
 
 // getUrl returns Africa's Talking SMS URL based on the specified client environment
@@ -155,12 +155,12 @@ func formatResponse(response *http.Response) (Response, error) {
 
 // sendBulk sends Bulk SMS using the Africa's Talking API
 func (c *Client) SendBulk(request *BulkRequest) (Response, error) {
-	c.client = &http.Client{}
-	data := getBulkRequestBody(request, c.username, c.isSandbox)
-	url := getUrl(c.isSandbox, "bulk")
+	c.Client = &http.Client{}
+	data := getBulkRequestBody(request, c.Username, c.IsSandbox)
+	url := getUrl(c.IsSandbox, "bulk")
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data.Encode())))
-	setHeaders(req, c.apiKey)
-	resp, err := c.client.Do(req)
+	setHeaders(req, c.ApiKey)
+	resp, err := c.Client.Do(req)
 	if err != nil {
 		return Response{}, err
 	}
@@ -179,12 +179,12 @@ func (c *Client) SendBulk(request *BulkRequest) (Response, error) {
 }
 
 func (c *Client) SendPremium(request *PremiumRequest) (Response, error) {
-	c.client = &http.Client{}
-	data := getPremiumRequestBody(request, c.username, c.isSandbox)
-	url := getUrl(c.isSandbox, "premium")
+	c.Client = &http.Client{}
+	data := getPremiumRequestBody(request, c.Username, c.IsSandbox)
+	url := getUrl(c.IsSandbox, "premium")
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data.Encode())))
-	setHeaders(req, c.apiKey)
-	resp, err := c.client.Do(req)
+	setHeaders(req, c.ApiKey)
+	resp, err := c.Client.Do(req)
 	if err != nil {
 		return Response{}, err
 	}

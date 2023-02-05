@@ -2,18 +2,31 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
 
 	"github.com/edwinwalela/africastalking-go/pkg/sms"
 )
 
 func main() {
-	client := &sms.Client{}
-	request := &sms.PremiumRequest{}
-
-	response, err := client.SendPremium(request)
+	client := &sms.Client{
+		ApiKey:    os.Getenv("AT_API_KEY"),
+		Username:  os.Getenv("AT_USERNAME"),
+		IsSandbox: true,
+	}
+	premiumRequest := &sms.PremiumRequest{
+		To:            []string{"+254706496885"},
+		Message:       "Hello AT",
+		From:          "",
+		Keyword:       "",
+		Enqueue:       true,
+		LinkId:        "",
+		RetryDuration: time.Hour,
+		RequestId:     "",
+	}
+	response, err := client.SendPremium(premiumRequest)
 	if err != nil {
 		panic(err)
 	}
-
 	fmt.Println(response.Message)
 }
