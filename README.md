@@ -26,7 +26,7 @@ func main() {
 	}
 
 	bulkRequest := &BulkRequest{
-		To:            []string{"+254700000000"},
+		To:            []string{"+254700000000","+254700000001","+254700000002"},
 		Message:       "Hello AT",
 		From:          "",
 		BulkSMSMode:   true,
