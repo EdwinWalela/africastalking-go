@@ -6,15 +6,23 @@ import (
 )
 
 func TestSendBulk(t *testing.T) {
+
+	client := &Client{
+		ApiKey:    "",
+		IsSandbox: true,
+	}
+
 	bulkRequest := &BulkRequest{
 		Username:      "",
-		To:            []string{""},
+		To:            []string{"+254706496885"},
 		Message:       "Hello AT",
 		From:          "",
 		BulkSMSMode:   true,
 		RetryDuration: time.Hour,
 	}
-	_ = bulkRequest
+
+	client.sendBulk(bulkRequest)
+
 }
 
 func TestSendPremium(t *testing.T) {
