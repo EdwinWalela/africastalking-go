@@ -1,7 +1,6 @@
 package sms
 
 import (
-	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -24,7 +23,10 @@ func TestSendBulk(t *testing.T) {
 	if err != nil {
 		t.Fatalf("bulk sms request failed: %s", err.Error())
 	}
-	fmt.Println(response)
+	status := response.Recipients[0].Status
+	if status != "Success" {
+		t.Fatalf("expected status = 'success' got status = '%s'", status)
+	}
 }
 
 func TestSendPremium(t *testing.T) {

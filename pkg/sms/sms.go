@@ -68,9 +68,9 @@ func getUrl(isSandbox bool) string {
 }
 
 // getRequestBody generates the request body for the bulk SMS HTTP request to Africa's Talking API
-func getBulkRequestBody(request *BulkRequest, isSandbox bool) url.Values {
+func getBulkRequestBody(request *BulkRequest, username string, isSandbox bool) url.Values {
 	data := url.Values{
-		"username": {request.Username},
+		"username": {username},
 		"to":       {strings.Join(request.To, ",")},
 		"message":  {request.Message},
 	}
@@ -131,7 +131,7 @@ func formatResponse(response *http.Response) (Response, error) {
 // sendBulk sends Bulk SMS using the Africa's Talking API
 func (c *Client) SendBulk(request *BulkRequest) (Response, error) {
 	c.client = &http.Client{}
-	data := getBulkRequestBody(request, c.isSandbox)
+	data := getBulkRequestBody(request, c.username, c.isSandbox)
 	url := getUrl(c.isSandbox)
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data.Encode())))
 	setHeaders(req, c.apiKey)
