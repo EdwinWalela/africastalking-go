@@ -178,6 +178,7 @@ func (c *Client) SendBulk(request *BulkRequest) (Response, error) {
 	return formatResponse(resp)
 }
 
+// SendPremium sends Premium SMS using the Africa's Talking API
 func (c *Client) SendPremium(request *PremiumRequest) (Response, error) {
 	c.Client = &http.Client{}
 	data := getPremiumRequestBody(request, c.Username, c.IsSandbox)
