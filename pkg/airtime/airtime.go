@@ -18,11 +18,26 @@ const (
 	liveURL    = "https://api.africastalking.com/version1/airtime/send"
 )
 
+// Currency Codes
+const (
+	KES = "KES" // Kenyan Currency Code
+	UGX = "UGX" // Ugandan Currency Code
+	TZS = "TZS" // Tanzanian Currency Code
+	NGN = "NGN" // Nigeria  Currency Code
+	ETB = "ETB" // Ethiopian Currency Code
+	MWK = "MWK" // Malawi Currency Code
+	ZAR = "ZAR" // South Africa Currency Code
+	ZMW = "ZMW" // Zambia  Currency Code
+	RWF = "RWF" // Rwanda Currency Code
+	GHS = "GHS" // Ghana Currency Code
+	XOF = "XOF" // Senegal, Ivory Coast and Cameroon  Currency Code
+)
+
 // Recipient represent the target user to receive airtime
 type Recipient struct {
 	PhoneNumber string  // Phonenumber is the number to be topped up "+254xxxxxxx"
 	Amount      float64 // Amount is the value of airtime to send
-	Currency    string  // Currency is the currency code of the amount e.g KES
+	Currency    string  // Currency is the currency code of the amount e.g KES,UGX,TZS,NGN,ETB,MWK,ZMW,ZAR
 }
 
 // Request represents the request body for the Africa's talking airtime request
@@ -34,7 +49,7 @@ type Request struct {
 type Transaction struct {
 	PhoneNumber  string  // Phone number for this transaction
 	Amount       float64 // Amount is the value of airtime requested
-	Currency     string  // Currency is the currency code of the amount
+	Currency     string  // Currency is the currency code of the amount e.g KES,UGX,TZS,NGN,ETB,MWK,ZMW,ZAR
 	Discount     float64 // Discount is the discount applied to the requested airtime amount
 	Status       string  // Status of the request associated to this phone number
 	RequestId    string  // RequestId is an identifier for the request to this phone number. Only generated if the status of the request is 'sent'
@@ -45,7 +60,7 @@ type Transaction struct {
 type Response struct {
 	NumSent       int           // NumSent is the number of requests sent to the provider
 	TotalAmount   float64       // TotalAMount is the total value of airtime sent to the provider
-	Currency      string        // Currency is the currency code of the total amount
+	Currency      string        // Currency is the currency code of the total amount e.g KES,UGX,TZS,NGN,ETB,MWK,ZMW,ZAR
 	TotalDiscount float64       // TotalDiscount is the total discount applied on the airtime
 	Responses     []Transaction // Responses is a list of the airtime transaction results
 	ErrorMessage  string        // ErrorMessage is the error message if the entire request was rejected by the API
@@ -134,6 +149,7 @@ func formatResponse(response *http.Response) (Response, error) {
 	}, nil
 }
 
+// Send triggers Africa's Talking airtime API to send Airtime to the specified recipient(s)
 func (c *Client) Send(request *Request) (Response, error) {
 	c.Client = &http.Client{}
 	data := getRequestBody(request, c.Username)
