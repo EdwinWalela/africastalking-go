@@ -123,7 +123,7 @@ func setHeaders(request *http.Request, apiKey string) {
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 }
 
-// formartResponse maps response from Africa's Talking API to the internal Response type
+// formatResponse maps response from Africa's Talking API to the internal Response type
 func formatResponse(response *http.Response) (Response, error) {
 	res := make(map[string]interface{})
 	decoder := json.NewDecoder(response.Body)
