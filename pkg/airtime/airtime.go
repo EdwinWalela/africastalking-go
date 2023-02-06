@@ -34,7 +34,7 @@ const (
 
 // Recipient represent the target user to receive airtime
 type Recipient struct {
-	PhoneNumber string  // Phonenumber is the number to be topped up "+254xxxxxxx"
+	PhoneNumber string  // PhoneNumber is the number to be topped up "+254xxxxxxx"
 	Amount      float64 // Amount is the value of airtime to send
 	Currency    string  // Currency is the currency code of the amount e.g KES,UGX,TZS,NGN,ETB,MWK,ZMW,ZAR
 }
