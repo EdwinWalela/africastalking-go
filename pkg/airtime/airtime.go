@@ -1,4 +1,8 @@
-// Package airtime sends airtime
+/*
+Package airtime sends airtime
+
+Africa's Talking API Reference: https://developers.africastalking.com/docs/airtime/sending
+*/
 package airtime
 
 import (

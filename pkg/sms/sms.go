@@ -1,4 +1,10 @@
-// Package sms sends Bulk and Premium SMS
+/*
+Package SMS sends Bulk and Premium SMS
+
+Bulk SMS API Reference: https://developers.africastalking.com/docs/sms/sending/bulk
+
+Premium SMS API Reference: https://developers.africastalking.com/docs/sms/sending/premium
+*/
 package sms
 
 import (
