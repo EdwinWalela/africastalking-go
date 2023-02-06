@@ -16,7 +16,7 @@ func TestSendAirtime(t *testing.T) {
 	recipient := Recipient{
 		PhoneNumber: "+254706496885",
 		Amount:      10,
-		Currency:    "KES",
+		Currency:    KES,
 	}
 
 	request := &Request{

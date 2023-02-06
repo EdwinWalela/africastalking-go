@@ -18,13 +18,12 @@ const (
 	liveURL    = "https://api.africastalking.com/version1/airtime/send"
 )
 
-// Currency Codes
 const (
-	KES = "KES" // Kenyan Currency Code
-	UGX = "UGX" // Ugandan Currency Code
-	TZS = "TZS" // Tanzanian Currency Code
+	KES = "KES" // Kenya Currency Code
+	UGX = "UGX" // Uganda Currency Code
+	TZS = "TZS" // Tanzania Currency Code
 	NGN = "NGN" // Nigeria  Currency Code
-	ETB = "ETB" // Ethiopian Currency Code
+	ETB = "ETB" // Ethiopia Currency Code
 	MWK = "MWK" // Malawi Currency Code
 	ZAR = "ZAR" // South Africa Currency Code
 	ZMW = "ZMW" // Zambia  Currency Code
