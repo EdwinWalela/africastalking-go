@@ -7,6 +7,7 @@ package voice
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -16,8 +17,8 @@ import (
 )
 
 const (
-	sandboxURL = "https://voice.africastalking.com/call"
-	liveURL    = "https://voice.sandbox.africastalking.com/call"
+	liveURL    = "https://voice.africastalking.com/call"
+	sandboxURL = "https://voice.sandbox.africastalking.com/call"
 )
 
 // Client represents the HTTP client responsible for communicating with Africa's Talking API
@@ -65,12 +66,25 @@ func getRequestBody(request *Request, username string) url.Values {
 	}
 }
 
+// formatResponse maps response from Africa's Talking API to the internal Response type
 func formatResponse(response *http.Response) (Response, error) {
-	fmt.Println(response)
+	res := make(map[string]interface{})
+	decoder := json.NewDecoder(response.Body)
+	if err := decoder.Decode(&res); err != nil {
+		return Response{}, err
+	}
+
+	fmt.Println(res)
 	return Response{}, nil
 }
 
-// Call makes an outbound call through Africa's Talking Voice API
+/*
+Call makes an outbound call through Africa's Talking Voice API.
+
+When the call is picked, Africa's Talking will call your callback url.
+
+API Reference: https://developers.africastalking.com/docs/voice/handle_calls
+*/
 func (c *Client) Call(request *Request) (Response, error) {
 	c.client = &http.Client{}
 	data := getRequestBody(request, c.Username)
