@@ -84,7 +84,6 @@ make test
 - [ ] Notifications
 
 ### Airtime
-- [ ] Sending
 - [ ] Query
 
 ### Payments
