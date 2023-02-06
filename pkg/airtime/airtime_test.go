@@ -27,5 +27,5 @@ func TestSendAirtime(t *testing.T) {
 	if err != nil {
 		t.Fatalf("airtime request failed: %s", err.Error())
 	}
-	fmt.Println(response.Responses)
+	fmt.Println(response)
 }

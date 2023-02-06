@@ -63,7 +63,7 @@ type Client struct {
 func formatRecipients(recipients []Recipient) string {
 	str := "["
 	for i, recipient := range recipients {
-		str += fmt.Sprintf(`{"phoneNumber":"%s","currencyCode":"%s","amount":"%.0f"}`, recipient.PhoneNumber, recipient.Currency, recipient.Amount)
+		str += fmt.Sprintf(`{"phoneNumber":"%s","amount":"%s %.2f"}`, recipient.PhoneNumber, recipient.Currency, recipient.Amount)
 		if i != len(recipients)-1 {
 			str += ","
 		}
