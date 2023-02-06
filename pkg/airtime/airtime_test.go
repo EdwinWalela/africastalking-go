@@ -1,14 +1,16 @@
 package airtime
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
 
 func TestSendAirtime(t *testing.T) {
 	client := Client{
-		Username: os.Getenv("AT_USERNAME"),
-		ApiKey:   os.Getenv("AT_APIKEY"),
+		Username:  os.Getenv("AT_USERNAME"),
+		ApiKey:    os.Getenv("AT_API_KEY"),
+		IsSandbox: true,
 	}
 
 	recipient := Recipient{
@@ -18,8 +20,12 @@ func TestSendAirtime(t *testing.T) {
 	}
 
 	request := &Request{
-		Recipients: []Recipient{recipient, recipient},
+		Recipients: []Recipient{recipient},
 	}
 
-	client.Send(request)
+	response, err := client.Send(request)
+	if err != nil {
+		t.Fatalf("airtime request failed: %s", err.Error())
+	}
+	fmt.Println(response.Responses)
 }
