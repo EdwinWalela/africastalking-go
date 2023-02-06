@@ -68,6 +68,13 @@ make test
 
 ### SMS
 - [x] Sending (Bulk & Premium)
+
+### Airtime
+- [x] Sending
+
+## TODO
+
+### SMS
 - [ ] Premium Subscriptions
 - [ ] Fetch Messages
 - [ ] Notifications
