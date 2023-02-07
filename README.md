@@ -76,6 +76,9 @@ make test
 ### Airtime
 - [x] Sending
 
+### Voice
+- [x] Call
+
 ## TODO
 
 ### SMS
