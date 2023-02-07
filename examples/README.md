@@ -11,4 +11,5 @@
 
 ### Voice
 - [SDK Reference](https://pkg.go.dev/github.com/edwinwalela/africastalking-go/pkg/voice)
-- [Example](./voice/)
+- [Call Example](./voice/call)
+- [Call Transfer Example](./voice/transfer/)
