@@ -16,7 +16,7 @@ func main() {
 	}
 
 	// Define the request body for the call request
-	request := &voice.Request{
+	request := &voice.CallRequest{
 		From: os.Getenv("AT_CALLER_ID"),
 		To:   []string{"+254700000001"},
 	}

@@ -12,7 +12,7 @@ func TestCall(t *testing.T) {
 		IsSandbox: true,
 	}
 
-	request := &Request{
+	request := &CallRequest{
 		From: os.Getenv("AT_CALLER_ID"),
 		To:   []string{"+254700000001"},
 	}

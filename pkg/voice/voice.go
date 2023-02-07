@@ -28,8 +28,8 @@ type Client struct {
 	client    *http.Client // HTTP client for making requests to Africa's Talking API
 }
 
-// Request represents the body to be sent to the Voice API
-type Request struct {
+// CallRequest represents the body to be sent to the Voice API when initiating a call
+type CallRequest struct {
 	From            string   // Your Africa's Talking phone number "+254xxxxxxxx"
 	To              []string // Recipients' phone numbers
 	ClientRequestId string   // Identifier sent to the registered Callback URL that can be used to tag the call
@@ -42,8 +42,8 @@ type Recipient struct {
 	SessionId   string // A unique identifier for the request associated to this phone number
 }
 
-// Response represents the response from Africa's Talking Voice API
-type Response struct {
+// CallResponse represents the response after initiating a Call
+type CallResponse struct {
 	Recipients   []Recipient // List of recipients and their status
 	ErrorMessage string      // Error message if the entire request was rejected by the API
 }
@@ -56,7 +56,7 @@ func setHeaders(request *http.Request, apiKey string) {
 }
 
 // getRequestBody generates the request body for the voice HTTP request to Africa's Talking API
-func getRequestBody(request *Request, username string) url.Values {
+func getRequestBody(request *CallRequest, username string) url.Values {
 	return url.Values{
 		"username":        {username},
 		"from":            {request.From},
@@ -66,11 +66,11 @@ func getRequestBody(request *Request, username string) url.Values {
 }
 
 // formatResponse maps response from Africa's Talking API to the internal Response type
-func formatResponse(response *http.Response) (Response, error) {
+func formatResponse(response *http.Response) (CallResponse, error) {
 	res := make(map[string]interface{})
 	decoder := json.NewDecoder(response.Body)
 	if err := decoder.Decode(&res); err != nil {
-		return Response{}, err
+		return CallResponse{}, err
 	}
 
 	entries := res["entries"].([]interface{})
@@ -86,7 +86,7 @@ func formatResponse(response *http.Response) (Response, error) {
 		recipients = append(recipients, recipient)
 	}
 
-	return Response{
+	return CallResponse{
 		ErrorMessage: res["errorMessage"].(string),
 		Recipients:   recipients,
 	}, nil
@@ -99,7 +99,7 @@ When the call is picked, Africa's Talking will call your callback url.
 
 API Reference: https://developers.africastalking.com/docs/voice/handle_calls
 */
-func (c *Client) Call(request *Request) (Response, error) {
+func (c *Client) Call(request *CallRequest) (CallResponse, error) {
 	c.client = &http.Client{}
 	data := getRequestBody(request, c.Username)
 	url := liveURL
@@ -110,17 +110,17 @@ func (c *Client) Call(request *Request) (Response, error) {
 	setHeaders(req, c.ApiKey)
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return Response{}, err
+		return CallResponse{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
-			return Response{}, err
+			return CallResponse{}, err
 		}
 		res := string(bodyBytes)
-		return Response{}, errors.New(res)
+		return CallResponse{}, errors.New(res)
 	}
 
 	return formatResponse(resp)
