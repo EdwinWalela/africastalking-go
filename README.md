@@ -48,10 +48,14 @@ git clone https://github.com/EdwinWalela/africastalking-go
 
 Export Africa's talking credentials (sandbox)
 
+A caller ID is required for the Voice API. You can generate one on the sandbox dashboard under Voice > Create Number
+
 ```bash
 export AT_USERNAME=sandbox
 
 export AT_API_KEY=xxxxxxxxxxxxx
+
+export AT_CALLER_ID=+254xxxxxxxxx 
 ```
 
 Run tests
