@@ -35,6 +35,14 @@ type CallRequest struct {
 	ClientRequestId string   // Identifier sent to the registered Callback URL that can be used to tag the call
 }
 
+// CallTransferRequest represents the body to be sent to the Voice API when transferring a call
+type CallTransferRequest struct {
+	SessionId    string // Identifier of the on going call (Required)
+	PhoneNumber  string // Phone number to transfer the call to (Required)
+	CallLeg      string // Call leg to transfer the call to. Either 'caller' or 'callee' Default 'callee' (Optional)
+	HoldMusicUrl string // URL of the media file to be played when user is on hold. 'http://xxxxxx'
+}
+
 // Recipient represents the status of the call of an individual user specified in Request
 type Recipient struct {
 	PhoneNumber string // Recipient's phone number
@@ -46,6 +54,12 @@ type Recipient struct {
 type CallResponse struct {
 	Recipients   []Recipient // List of recipients and their status
 	ErrorMessage string      // Error message if the entire request was rejected by the API
+}
+
+// CallTransferResponse represents the
+type CallTransferResponse struct {
+	Status       string // Status of the call transfer request. 'Success' or 'Aborted'
+	ErrorMessage string // Reason why the transfer was aborted
 }
 
 // setHeaders configures required headers for the HTTP request to Africa's Talking API
