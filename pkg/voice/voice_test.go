@@ -22,5 +22,5 @@ func TestCall(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_ = response
+	fmt.Println(response)
 }

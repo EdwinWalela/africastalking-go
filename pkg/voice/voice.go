@@ -9,7 +9,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -74,8 +73,23 @@ func formatResponse(response *http.Response) (Response, error) {
 		return Response{}, err
 	}
 
-	fmt.Println(res)
-	return Response{}, nil
+	entries := res["entries"].([]interface{})
+	recipients := []Recipient{}
+
+	for _, entry := range entries {
+		data := entry.(map[string]interface{})
+		recipient := Recipient{
+			PhoneNumber: data["phoneNumber"].(string),
+			Status:      data["status"].(string),
+			SessionId:   data["sessionId"].(string),
+		}
+		recipients = append(recipients, recipient)
+	}
+
+	return Response{
+		ErrorMessage: res["errorMessage"].(string),
+		Recipients:   recipients,
+	}, nil
 }
 
 /*
