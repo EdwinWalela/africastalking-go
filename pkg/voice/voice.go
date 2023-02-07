@@ -16,8 +16,10 @@ import (
 )
 
 const (
-	liveURL    = "https://voice.africastalking.com/call"
-	sandboxURL = "https://voice.sandbox.africastalking.com/call"
+	callLiveURL        = "https://voice.africastalking.com/call"
+	callSandboxURL     = "https://voice.sandbox.africastalking.com/call"
+	transferLiveUrl    = "https://voice.africastalking.com/callTransfer"
+	transferSandboxURL = "https://voice.sandbox.africastalking.com/callTransfer"
 )
 
 // Client represents the HTTP client responsible for communicating with Africa's Talking API
@@ -70,7 +72,7 @@ func setHeaders(request *http.Request, apiKey string) {
 }
 
 // getRequestBody generates the request body for the voice HTTP request to Africa's Talking API
-func getRequestBody(request *CallRequest, username string) url.Values {
+func getCallRequestBody(request *CallRequest, username string) url.Values {
 	return url.Values{
 		"username":        {username},
 		"from":            {request.From},
@@ -79,8 +81,18 @@ func getRequestBody(request *CallRequest, username string) url.Values {
 	}
 }
 
-// formatResponse maps response from Africa's Talking API to the internal Response type
-func formatResponse(response *http.Response) (CallResponse, error) {
+// getCallTransferRequestBody generates the request body for the call transfer HTTP request to Africa's Talking API
+func getCallTransferRequestBody(request *CallTransferRequest, username string) url.Values {
+	return url.Values{
+		"username":     {username},
+		"sessionId":    {request.SessionId},
+		"callLeg":      {request.CallLeg},
+		"holdMusicUrl": {request.HoldMusicUrl},
+	}
+}
+
+// formatCallResponse maps response from Africa's Talking call API to the internal Response type
+func formatCallResponse(response *http.Response) (CallResponse, error) {
 	res := make(map[string]interface{})
 	decoder := json.NewDecoder(response.Body)
 	if err := decoder.Decode(&res); err != nil {
@@ -106,6 +118,19 @@ func formatResponse(response *http.Response) (CallResponse, error) {
 	}, nil
 }
 
+// formatCallTransferResponse maps response from Africa's Talking call transfer API to the internal Response type
+func formatCallTransferResponse(response *http.Response) (CallTransferResponse, error) {
+	res := make(map[string]string)
+	decoder := json.NewDecoder(response.Body)
+	if err := decoder.Decode(&res); err != nil {
+		return CallTransferResponse{}, err
+	}
+	return CallTransferResponse{
+		Status:       res["status"],
+		ErrorMessage: res["errorMessage"],
+	}, nil
+}
+
 /*
 Call makes an outbound call through Africa's Talking Voice API.
 
@@ -115,10 +140,10 @@ API Reference: https://developers.africastalking.com/docs/voice/handle_calls
 */
 func (c *Client) Call(request *CallRequest) (CallResponse, error) {
 	c.client = &http.Client{}
-	data := getRequestBody(request, c.Username)
-	url := liveURL
+	data := getCallRequestBody(request, c.Username)
+	url := callLiveURL
 	if c.IsSandbox {
-		url = sandboxURL
+		url = callSandboxURL
 	}
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data.Encode())))
 	setHeaders(req, c.ApiKey)
@@ -137,5 +162,34 @@ func (c *Client) Call(request *CallRequest) (CallResponse, error) {
 		return CallResponse{}, errors.New(res)
 	}
 
-	return formatResponse(resp)
+	return formatCallResponse(resp)
+}
+
+// Transfer transfers a call to another number.  Only works in live environment
+func (c *Client) Transfer(request *CallTransferRequest) (CallTransferResponse, error) {
+	c.client = &http.Client{}
+	data := getCallTransferRequestBody(request, c.Username)
+	url := transferLiveUrl
+	if c.IsSandbox {
+		url = transferSandboxURL
+	}
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data.Encode())))
+	setHeaders(req, c.ApiKey)
+	resp, err := c.client.Do(req)
+
+	if err != nil {
+		return CallTransferResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return CallTransferResponse{}, err
+		}
+		res := string(bodyBytes)
+		return CallTransferResponse{}, errors.New(res)
+	}
+
+	return formatCallTransferResponse(resp)
 }
