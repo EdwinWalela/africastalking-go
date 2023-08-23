@@ -3,7 +3,6 @@ package data
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -63,9 +62,7 @@ func (c *Client) SendMobileData(request *DataRequest) (DataResponse, error) {
 
 	b, _ := json.Marshal(request)
 
-	fmt.Println("REQUEST BODY ", string(b))
-
-	req, _ := http.NewRequest("Post", url, bytes.NewBuffer(b))
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(b))
 
 	setHeaders(req, c.ApiKey)
 
@@ -77,14 +74,18 @@ func (c *Client) SendMobileData(request *DataRequest) (DataResponse, error) {
 
 	defer response.Body.Close()
 
-	responseBody, _ := io.ReadAll(response.Body)
+	responseBody, err := io.ReadAll(response.Body)
+
+	if err != nil {
+		log.Fatalf("Error reading response body into []byte : %v", err)
+	}
 
 	var dataResponse DataResponse
 
 	err = json.Unmarshal(responseBody, &dataResponse)
 
 	if err != nil {
-		log.Fatalf("Error unmarshalling json", err)
+		log.Fatalf("Error unmarshalling json : %v", err)
 	}
 
 	return DataResponse{
