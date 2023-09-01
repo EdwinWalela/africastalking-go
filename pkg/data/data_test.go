@@ -1,23 +1,25 @@
 package data
 
-import "testing"
+import (
+	"testing"
+)
 
-func TestData(t *testing.T) {
+func TestSendData(t *testing.T) {
 	client := &Client{
-		ApiKey:    "",
-		Username:  "",
+		ApiKey:    "f0d2459e095f1bc43aaedcfb3dff0a45ff9c32e16794a9c21b170fbb6df1a657",
+		Username:  "DanielSogbey",
 		IsSandbox: true,
 	}
 
-	dataRequest := &DataRequest{
-		Username:    "",
-		ProductName: "",
+	dataRequest := &Request{
+		Username:    "DanielSogbey",
+		ProductName: "Open Source Software",
 		Recipients: []Recipient{
-			{PhoneNumber: "", Quantity: "", Unit: "", Validity: "", IsPromoBundle: "", MetaData: ""},
+			{PhoneNumber: "+233558159629", Quantity: 2, Unit: "MB", Validity: "Day", IsPromoBundle: "true", MetaData: ""},
 		},
 	}
 
-	response, err := client.SendMobileData(dataRequest)
+	response, err := client.Send(dataRequest)
 
 	if err != nil {
 		t.Fatalf("Send data request failed: %s", err.Error())

@@ -1,32 +1,36 @@
+/*
+Package data enables the ability to sends mobile data
+Send Mobile Data API Reference: https://developers.africastalking.com/docs/data/overview
+*/
+
 package data
 
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 )
 
 type Recipient struct {
-	PhoneNumber   string
-	Quantity      string
-	Unit          string
-	Validity      string
-	IsPromoBundle string
-	MetaData      interface{}
+	PhoneNumber   string      `json:"phone_number"`
+	Quantity      int         `json:"quantity"`
+	Unit          string      `json:"unit"`
+	Validity      string      `json:"validity"`
+	IsPromoBundle string      `json:"is_promo_bundle"`
+	MetaData      interface{} `json:"meta_data"`
 }
 
-/*
-DataRequest represents the structure for the request
-body to be sent to Africa's Talking api endpoint
-*/
-type DataRequest struct {
-	Username    string
-	ProductName string
-	Recipients  []Recipient
+// Request represents the request body send mobile data request
+type Request struct {
+	Username    string      `json:"username"`
+	ProductName string      `json:"productName"`
+	Recipients  []Recipient `json:"recipients"`
 }
 
+// Entry is an individual data transaction result
 type Entry struct {
 	PhoneNumber   string `json:"phoneNumber"`
 	Provider      string `json:"provider"`
@@ -35,7 +39,8 @@ type Entry struct {
 	Value         string `json:"value"`
 }
 
-type DataResponse struct {
+// Response represents the response from Africa's Talking API
+type Response struct {
 	Entries []Entry `json:"entries"`
 }
 
@@ -50,17 +55,21 @@ type Client struct {
 	Client    *http.Client //
 }
 
+// setHeaders configures required headers for the HTTP request to Africa's Talking API
 func setHeaders(request *http.Request, apiKey string) {
 	request.Header.Set("apiKey", apiKey)
 	request.Header.Set("accept", "application/json")
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Set("Content-Type", "application/json")
 }
 
-func (c *Client) SendMobileData(request *DataRequest) (DataResponse, error) {
+func (c *Client) Send(request *Request) (Response, error) {
 	c.Client = &http.Client{}
 	url := "https://payments.africastalking.com/mobile/data/request"
 
+	//Marshal turns the request struct into a []byte to be fed into the http request
 	b, _ := json.Marshal(request)
+
+	// fmt.Printf("REQUEST BODY : %v", string(b))
 
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(b))
 
@@ -80,7 +89,9 @@ func (c *Client) SendMobileData(request *DataRequest) (DataResponse, error) {
 		log.Fatalf("Error reading response body into []byte : %v", err)
 	}
 
-	var dataResponse DataResponse
+	fmt.Printf("RESPONSE BODY: %v", string(responseBody))
+
+	var dataResponse Response
 
 	err = json.Unmarshal(responseBody, &dataResponse)
 
@@ -88,7 +99,7 @@ func (c *Client) SendMobileData(request *DataRequest) (DataResponse, error) {
 		log.Fatalf("Error unmarshalling json : %v", err)
 	}
 
-	return DataResponse{
+	return Response{
 		Entries: dataResponse.Entries,
 	}, nil
 }
