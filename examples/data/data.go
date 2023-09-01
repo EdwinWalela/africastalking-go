@@ -3,26 +3,27 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/edwinwalela/africastalking-go/pkg/data"
 )
 
 func main() {
 	client := &data.Client{
-		ApiKey:    " ",
-		Username:  "",
+		ApiKey:    os.Getenv("AT_API_KEY"),
+		Username:  os.Getenv("AT_USERNAME"),
 		IsSandbox: true,
 	}
 
-	dataRequest := &data.DataRequest{
-		Username:    "",
-		ProductName: "",
+	dataRequest := &data.Request{
+		Username:    os.Getenv("AT_USERNAME"),
+		ProductName: os.Getenv("AT_PRODUCT_NAME"),
 		Recipients: []data.Recipient{
-			{PhoneNumber: "", Quantity: "", Unit: "", Validity: "", IsPromoBundle: "", MetaData: ""},
+			{PhoneNumber: "+233558159629", Quantity: 2, Unit: "MB", Validity: "Day", IsPromoBundle: "true"},
 		},
 	}
 
-	response, err := client.SendMobileData(dataRequest)
+	response, err := client.Send(dataRequest)
 
 	if err != nil {
 		log.Fatalf("Error making request to Africa's Talking API %v", err)
