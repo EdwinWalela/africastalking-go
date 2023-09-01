@@ -16,7 +16,7 @@ func TestSendData(t *testing.T) {
 		Username:    os.Getenv("AT_USERNAME"),
 		ProductName: os.Getenv("AT_PRODUCT_NAME"),
 		Recipients: []Recipient{
-			{PhoneNumber: "+233558159629", Quantity: 2, Unit: "MB", Validity: "Day", IsPromoBundle: "true", MetaData: ""},
+			{PhoneNumber: "+233558159629", Quantity: 2, Unit: "MB", Validity: "Day", IsPromoBundle: "true"},
 		},
 	}
 
