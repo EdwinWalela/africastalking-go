@@ -13,10 +13,10 @@ func TestSendData(t *testing.T) {
 	}
 
 	dataRequest := &Request{
-		Username:    os.Getenv("AT_USERNAME"),
-		ProductName: os.Getenv("AT_PRODUCT_NAME"),
+		Username:    "sandbox",
+		ProductName: "barkenew",
 		Recipients: []Recipient{
-			{PhoneNumber: "+233558159629", Quantity: 2, Unit: "MB", Validity: "Day", IsPromoBundle: "true"},
+			{PhoneNumber: "+254711445566", Quantity: 2, Unit: "MB", Validity: "Day", MetaData: make(map[string]interface{})},
 		},
 	}
 
