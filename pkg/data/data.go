@@ -8,7 +8,6 @@ package data
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -69,8 +68,6 @@ func (c *Client) Send(request *Request) (Response, error) {
 	//Marshal turns the request struct into a []byte to be fed into the http request
 	b, _ := json.Marshal(request)
 
-	fmt.Printf("REQUEST BODY : %v", string(b))
-
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(b))
 
 	setHeaders(req, c.ApiKey)
@@ -88,8 +85,6 @@ func (c *Client) Send(request *Request) (Response, error) {
 	if err != nil {
 		log.Fatalf("Error reading response body into []byte : %v", err)
 	}
-
-	fmt.Printf("RESPONSE BODY: %v", string(responseBody))
 
 	var dataResponse Response
 
